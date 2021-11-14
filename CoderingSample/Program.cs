@@ -22,6 +22,7 @@ namespace CoderingSample
       var cache = new CoderingCache(coderingen);
       await cache.CacheAll();
 
+      // artikelen
       var articleImport = new ArticleImport(cache);
 
       var rawEntities = articleImport.LoadSource();
@@ -34,6 +35,22 @@ namespace CoderingSample
         Console.WriteLine(JsonSerializer.Serialize(article, new JsonSerializerOptions(){ WriteIndented = true}));
         Console.WriteLine();
       }
+
+
+      // kenmerken
+      var featureImport = new VbnFeatureImport(cache);
+
+      var rawEntities2 = featureImport.LoadSource();
+
+      Console.WriteLine($"Start import of {rawEntities2.Length} features");
+      foreach (var rawEntity in rawEntities2.Take(10))
+      {
+        var feature = await featureImport.GetNew(rawEntity);
+
+        Console.WriteLine(JsonSerializer.Serialize(feature, new JsonSerializerOptions() { WriteIndented = true }));
+        Console.WriteLine();
+      }
+      
 
       Console.WriteLine("Done");
     }
